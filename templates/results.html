@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Results</title>
+</head>
+<body>
+    <h1>Option Ratings</h1>
+    <ul>
+        {% for option, score in scores.items() %}
+            <li><strong>{{ option }}</strong>: {{ score }}</li>
+        {% endfor %}
+    </ul>
+    <a href="{{ url_for('index') }}">Back to voting</a>
+</body>
+</html>

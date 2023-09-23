@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Choose One</title>
+    <style>
+        #userAddOption {
+            margin-top: 30px;
+        }
+
+        #addOptionInput {
+            margin-right: 10px;
+        }
+
+        #nahButton {
+            display: block;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Which do you prefer?</h1>
+    <button id="option1">Loading...</button>
+    <button id="option2">Loading...</button>
+    <button id="nahButton">Nah, not feeling it</button>
+
+    <div id="userAddOption">
+        <input type="text" id="addOptionInput" placeholder="Add a new option...">
+        <button onclick="addNewOption()">Add</button>
+    </div>
+
+    <script>
+        function sendChoice(selected_option_id, non_selected_option_id) {
+            fetch('/vote', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    'selected_option_id': selected_option_id,
+                    'non_selected_option_id': non_selected_option_id
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                updateOptions();
+            });
+        }
+
+        function updateOptions() {
+            fetch('/random_options')
+                .then(response => response.json())
+                .then(data => {
+                    const option1 = document.getElementById('option1');
+                    const option2 = document.getElementById('option2');
+                    
+                    const keys = Object.keys(data);
+                    option1.textContent = data[keys[0]];
+                    option2.textContent = data[keys[1]];
+
+                    option1.onclick = function() {
+                        sendChoice(keys[0], keys[1]);
+                    };
+
+                    option2.onclick = function() {
+                        sendChoice(keys[1], keys[0]);
+                    };
+                });
+        }
+
+        function addNewOption() {
+            const input = document.getElementById('addOptionInput');
+            const optionName = input.value.trim();
+
+            if (optionName) {
+                fetch('/user_add_option', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ 'name': optionName })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                    input.value = ""; // clear the input
+                })
+                .catch(error => {
+                    console.error("There was an error adding the option:", error);
+                });
+            } else {
+                alert("Please enter a valid option.");
+            }
+        }
+
+        window.onload = updateOptions;
+        document.getElementById("nahButton").onclick = updateOptions;
+    </script>
+</body>
+</html>
