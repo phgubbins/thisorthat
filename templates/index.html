@@ -10,13 +10,18 @@
         }
 
         #addOptionInput {
-            margin-right: 10px;
+            margin-right: 30px;
         }
 
         #nahButton {
             display: block;
             margin: 20px 0;
         }
+
+        #addOptionParagraph {
+            margin-top: 30px;
+        }
+
     </style>
 </head>
 <body>
@@ -25,10 +30,10 @@
     <button id="option2">Loading...</button>
     <button id="nahButton">Nah, not feeling it</button>
 
-    <p>or you can...</p>
+    <p>or you can add a new option to the database...</p>
 
     <div id="userAddOption">
-        <input type="text" id="addOptionInput" placeholder="Add a new option to the database...">
+        <input type="text" id="addOptionInput" placeholder="New database option...">
         <button onclick="addNewOption()">Add</button>
     </div>
 
